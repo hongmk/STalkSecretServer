@@ -2,22 +2,23 @@ create database restful;
 
 use restful;
 
-create table user(
-id integer primary key auto_increment,
-user_id varchar(100) NOT NULL unique,
-nicname varchar(50) NOT NULL unique,
-password varchar(100) NOT NULL,
-signup_date datetime default NOW(),
-withdraw_date datetime
+drop table user;
+
+CREATE TABLE user (
+    row_id INTEGER NOT NULL AUTO_INCREMENT,
+    user_id VARCHAR(50) NOT NULL,
+    nicname VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    alert_recive_yn TINYINT,
+    app_token TEXT,
+    signup_date DATETIME DEFAULT NOW(),
+    last_modify_date DATETIME,
+    withdraw_date DATETIME,
+    PRIMARY KEY (row_id , user_id , nicname)
 );
 
-drop table user
-
-
-ALTER TABLE user ADD  officemail varchar(100);
-ALTER TABLE user DROP  officemail;
-
-ALTER TABLE user ADD  nicname varchar(20);
-ALTER TABLE user MODIFY nicname varchar(40);
-
 select * from user;
+
+SELECT * 
+  FROM USER_CONSTRAINTS 
+ WHERE TABLE_NAME = 'user';

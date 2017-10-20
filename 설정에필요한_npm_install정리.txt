@@ -1,0 +1,16 @@
+npm install 정보 정리
+
+STalkSecretServer 
+
+STalkSecretServer 보다 한단계 상위디렉토리에서 입력
+$ npm install -g express-generator
+$ express STalkSecretServer		
+	y (express용 프로젝트를 생성함 이미 디렉토리가 있으면 디렉토리 안에 기본파일들 생성)
+		*이미 기본파일이 있고, 수정된 상태라면 해당 명령은 수행하지 말 것!
+
+STalkSecretServer 디렉토리에서 입력
+$ npm install (package.json 에 있는 관련 라이브러리 모두 설치)
+$ npm install cors --save
+
+서버실행 테스트: node bin/www
+postman으로 http://127.0.0.1:3000 작성한 API호출 테스트
