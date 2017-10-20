@@ -5,8 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index'); //중요!
-var users = require('./routes/users'); //중요!
+//중요!
+var index = require('./routes/index');
+var user = require('./routes/user'); 
+var contents = require('./routes/contents'); 
+var comments = require('./routes/comments'); 
+var users = require('./routes/users'); 
 
 var app = express();
 
@@ -23,8 +27,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index); 		//중요! (루트경로로 요청되면 ./routes/index로 처리)
+app.use('/user', user);
+app.use('/contents', contents);
+app.use('/comments', comments);
 app.use('/users', users); 	//중요! (users경로로 요청되면 ./routes/users)
-							//만약 user로 요청하면 index로 처리됨
+							//위에 정의가 안된 경로는 index로 처리됨
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,3 +1,6 @@
+var express = require('express');
+var router = express.Router();
+
 router.get('/contents/list', function(req, res){
 	var boardid = req.query.boardid;
 	res.send(JSON.stringify([]));
@@ -15,9 +18,10 @@ router.post('/contents', function(req, res) {
 	var boardid = req.body.boardid;
 	var id = req.body.id;
 	var nicname = req.body.nicname;
+	var content_title = req.body.title;
 	var content = req.body.content;
 
-	res.send(JSON.stringify({boardid:boardid, id:id, nicname:nicname, content:content}));
+	res.send(JSON.stringify({boardid:boardid, id:id, nicname:nicname, content_title:content_title, content:content}));
 	//res.send(JSON.stringify({}));
 });
 
@@ -52,3 +56,5 @@ router.get('/contents/contentlist', function(req, res){
 	var nicname = req.query.nicname;
 	res.send(JSON.stringify([]));
 });
+
+module.exports = router;

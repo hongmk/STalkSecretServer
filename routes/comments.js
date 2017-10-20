@@ -1,3 +1,6 @@
+var express = require('express');
+var router = express.Router();
+
 router.get('/comments/list', function(req, res){
 	var contentid = req.body.contentid;
 	res.send(JSON.stringify({contentid:contentid}) + JSON.stringify([]));
@@ -48,3 +51,5 @@ router.get('/comments/commentlist', function(req, res){
 	var nicname = req.query.nicname;
 	res.send(JSON.stringify({nicname:nicname}) + JSON.stringify([]));
 });
+
+module.exports = router;
