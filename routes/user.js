@@ -5,13 +5,9 @@ var app = express();
 var crypto = require('crypto');
 var shasum = crypto.createHash('sha256');
 
-
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(__dirname+'/public'));
 
-//Cross Domain 이슈 대응 (CORS)
-var cors = require('cors')();
-app.use(cors);
 
 var mysql = require('mysql');
 //********** mysql connection **********
