@@ -1,4 +1,6 @@
 use restful;
+set sql_safe_updates=0;
+
 
 drop table user;
 
@@ -13,8 +15,12 @@ age integer
 select * from user;
 select * from user where user_id is null  ;
 
-delete from user ;
+delete from user where user_id is null;
+commit;
 
+update user
+set  user_id ='test1111', id=2
+where user_id is null ;
 
 create table user_login(
 id integer primary key auto_increment,
