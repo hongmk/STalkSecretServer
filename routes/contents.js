@@ -65,32 +65,32 @@ router.post('/', function(req, res) {
 	//res.send(JSON.stringify({}));
 });
 
-router.get('/contents/content', function(req, res){
+router.get('/content/:content_id', function(req, res){
 	//contentid, nicname
-	var contentid = req.query.contentid;
+	var content_id = req.params.content_id;
 	var nicname = req.query.nicname;
-	res.send(JSON.stringify({contentid:contentid, nicname:nicname}));
+	res.send(JSON.stringify({content_id:content_id, nicname:nicname}));
 	//res.send(JSON.stringify({}));
 });
 
-router.put('/contents/content', function(req, res) {
+router.put('/content', function(req, res) {
 	//contentid, content
-	var contentid = req.body.contentid;
+	var content_id = req.body.content_id;
 	var content = req.body.content;
 
-	res.send(JSON.stringify({contentid:contentid, content:content}));
+	res.send(JSON.stringify({content_id:content_id, content:content}));
 	//res.send(JSON.stringify({}));
 });
 
-router.delete('/contents/content', function(req, res) {
+router.delete('/content', function(req, res) {
 	//contentid
-	var contentid = req.body.contentid;
+	var content_id = req.body.content_id;
 
-	res.send(JSON.stringify({contentid:contentid}));
+	res.send(JSON.stringify({content_id:content_id}));
 	//res.send(JSON.stringify({}));
 });
 
-router.get('/contents/contentlist', function(req, res){
+router.get('/contentlist', function(req, res){
 	//사용자 작성글 리스트 조회
 	//nicname 
 	var nicname = req.query.nicname;

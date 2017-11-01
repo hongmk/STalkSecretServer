@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 //중요!
 var index = require('./routes/index');
-var user = require('./routes/user'); 
+var user = require('./routes/user');
 var contents = require('./routes/contents'); 
 var comments = require('./routes/comments'); 
 var users = require('./routes/users'); 

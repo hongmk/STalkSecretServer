@@ -1,16 +1,21 @@
-npm install Á¤º¸ Á¤¸®
+npm install ì •ë³´ ì •ë¦¬
 
 STalkSecretServer 
 
-STalkSecretServer º¸´Ù ÇÑ´Ü°è »óÀ§µğ·ºÅä¸®¿¡¼­ ÀÔ·Â
+STalkSecretServer ë³´ë‹¤ í•œë‹¨ê³„ ìƒìœ„ë””ë ‰í† ë¦¬ì—ì„œ ì…ë ¥
 $ npm install -g express-generator
 $ express STalkSecretServer		
-	y (express¿ë ÇÁ·ÎÁ§Æ®¸¦ »ı¼ºÇÔ ÀÌ¹Ì µğ·ºÅä¸®°¡ ÀÖÀ¸¸é µğ·ºÅä¸® ¾È¿¡ ±âº»ÆÄÀÏµé »ı¼º)
-		*ÀÌ¹Ì ±âº»ÆÄÀÏÀÌ ÀÖ°í, ¼öÁ¤µÈ »óÅÂ¶ó¸é ÇØ´ç ¸í·ÉÀº ¼öÇàÇÏÁö ¸» °Í!
+	y (expressìš© í”„ë¡œì íŠ¸ë¥¼ ìƒì„±í•¨ ì´ë¯¸ ë””ë ‰í† ë¦¬ê°€ ìˆìœ¼ë©´ ë””ë ‰í† ë¦¬ ì•ˆì— ê¸°ë³¸íŒŒì¼ë“¤ ìƒì„±)
+		*ì´ë¯¸ ê¸°ë³¸íŒŒì¼ì´ ìˆê³ , ìˆ˜ì •ëœ ìƒíƒœë¼ë©´ í•´ë‹¹ ëª…ë ¹ì€ ìˆ˜í–‰í•˜ì§€ ë§ ê²ƒ!
 
-STalkSecretServer µğ·ºÅä¸®¿¡¼­ ÀÔ·Â
-$ npm install (package.json ¿¡ ÀÖ´Â °ü·Ã ¶óÀÌºê·¯¸® ¸ğµÎ ¼³Ä¡)
+STalkSecretServer ë””ë ‰í† ë¦¬ì—ì„œ ì…ë ¥
+$ npm install (package.json ì— ìˆëŠ” ê´€ë ¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ ëª¨ë‘ ì„¤ì¹˜)
 $ npm install cors --save
+$ npm install crypto --save
+$ npm install json-web-token
 
-¼­¹ö½ÇÇà Å×½ºÆ®: node bin/www
-postmanÀ¸·Î http://127.0.0.1:3000 ÀÛ¼ºÇÑ APIÈ£Ãâ Å×½ºÆ®
+
+ì„œë²„ì‹¤í–‰ í…ŒìŠ¤íŠ¸: node bin/www
+postmanìœ¼ë¡œ http://127.0.0.1:3000 ì‘ì„±í•œ APIí˜¸ì¶œ í…ŒìŠ¤íŠ¸
+
+
