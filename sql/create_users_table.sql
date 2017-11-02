@@ -1,5 +1,5 @@
 create database restful;
-
+set sql_safe_updates=0;
 use restful;
 
 drop table users;
@@ -22,8 +22,8 @@ CREATE TABLE users (
 
 select * from users;
 
-
-
+update users
+set user_dept = 1;
 
 create table login_token(
 row_id integer primary key auto_increment,

@@ -22,8 +22,7 @@ CREATE TABLE contents (
 
 SELECT 
     *
-FROM
-    contents;
+FROM contents;
     
 update contents
 set like_cnt = 5, comment_cnt = 5 ;
