@@ -1,8 +1,11 @@
 create database restful;
+
 set sql_safe_updates=0;
+
 use restful;
 
 drop table users;
+
 delete from users;
 
 CREATE TABLE users (

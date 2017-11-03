@@ -16,6 +16,6 @@ $ npm install json-web-token
 
 
 서버실행 테스트: node bin/www
-postman으로 http://127.0.0.1:3000 작성한 API호출 테스트
+postman으로작성한 API호출 테스트
 
 
