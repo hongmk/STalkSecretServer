@@ -35,9 +35,20 @@ router.get('/list/:board_id', function(req, res){
 	//res.send(JSON.stringify([]));
 });
 
+//글 1개 조회
 router.get('/content/:row_id', function(req, res){
 	var row_id = req.params.row_id;
-	res.send(JSON.stringify({row_id:row_id}));
+
+	connection.query('select * from contents where row_id = ? and delete_yn = 0',[row_id],
+		function(err, results, fields){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(results[0]));
+		}
+	});
+
+	//res.send(JSON.stringify({row_id:row_id}));
 	//res.send(JSON.stringify({}));
 });
 
