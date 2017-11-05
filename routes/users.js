@@ -120,33 +120,6 @@ router.get('/auth/officemail', function(req, res) {
 	});
 });
 
-//닉네임인증
-router.get('/auth/nicname', function(req, res) { 
-	var nicname = req.query.nicname;
-	connection.query('select count(1) AS cnt from users where nicname=?',[nicname],
-	function(err, result) {
-		if(err){
-			res.send(JSON.stringify({
-				result:"false",
-				message:"닉네임 검증도중 시스템오류 발생. 다시시도하시기 바랍니다."
-			}));
-		} else {
-			if(result[0].cnt==0) {
-				res.send(JSON.stringify({
-					result:"true",
-					message:"등록가능한 닉네임입니다."
-				}));
-			} else {
-				res.send(JSON.stringify({
-					result:"false",
-					message:"이미등록된 닉네임입니다."
-				}));
-			}
-		}
-	});
-
-});
-
 
 var jwt = require('json-web-token');
 
@@ -219,5 +192,70 @@ router.post('/login',function(req,res){
 		});
 });
 ///////////////////////////////////////////////////////////
+
+//닉네임인증
+router.get('/auth/nicname', function(req, res) { 
+	var nicname = req.query.nicname;
+	connection.query('select count(1) AS cnt from users where nicname=?',[nicname],
+	function(err, result) {
+		if(err){
+			res.send(JSON.stringify({
+				result:"false",
+				message:"닉네임 검증도중 시스템오류 발생. 다시시도하시기 바랍니다."
+			}));
+		} else {
+			if(result[0].cnt==0) {
+				res.send(JSON.stringify({
+					result:"true",
+					message:"등록가능한 닉네임입니다."
+				}));
+			} else {
+				res.send(JSON.stringify({
+					result:"false",
+					message:"이미등록된 닉네임입니다."
+				}));
+			}
+		}
+	});
+
+});
+
+router.put('/nicname', function(req, res) {
+	//rowid, nicname
+	var rowid = req.body.rowid;
+	var nicname = req.body.nicname;
+	res.send(JSON.stringify({rowid:rowid, nicname:nicname}));
+	//res.send(JSON.stringify({}));
+});
+
+//현재 비밀번호 확인
+router.get('/password', function(req, res) {
+	//nicname, password
+	var nicname = req.query.nicname;
+	var password	= req.query.password;
+
+	res.send(JSON.stringify({nicname:nicname, password: password}));
+	//res.send(JSON.stringify({}));
+});
+
+//비밀번호 변경
+router.put('/password', function(req, res) {
+	//rowid, id, password
+	var rowid = req.body.rowid;
+	var id = req.body.id;
+	var password = req.body.password;
+	res.send(JSON.stringify({rowid:rowid, id:id, nicname:nicname}));
+	//res.send(JSON.stringify({}));
+});
+
+//알림설정
+router.put('/setting', function(req, res) {
+	//rowid, alertAgree
+	var rowid = req.body.rowid;
+	var alertAgree = req.body.alertAgree;
+	res.send(JSON.stringify({rowid:rowid, alertAgree:alertAgree}));
+	//res.send(JSON.stringify({}));
+});
+
 
 module.exports = router;

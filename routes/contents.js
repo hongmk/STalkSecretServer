@@ -84,28 +84,59 @@ router.get('/content/:content_id', function(req, res){
 	//res.send(JSON.stringify({}));
 });
 
+//글수정
 router.put('/content', function(req, res) {
 	//contentid, content
 	var content_id = req.body.content_id;
 	var content = req.body.content;
+	var last_modify_date = new Date();
+	connection.query('update contents set content = ? , last_modify_date = ? where row_id = ?',[content, last_modify_date, content_id],
+		function(err, result){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(result));
+		}
+	});
 
-	res.send(JSON.stringify({content_id:content_id, content:content}));
+	//res.send(JSON.stringify({content_id:content_id, content:content}));
 	//res.send(JSON.stringify({}));
 });
 
+//글삭제
 router.delete('/content', function(req, res) {
 	//contentid
 	var content_id = req.body.content_id;
+	var last_modify_date = new Date();
 
-	res.send(JSON.stringify({content_id:content_id}));
+	connection.query('update contents set delete_yn = ? , last_modify_date = ? where row_id = ?',[1, last_modify_date, content_id],
+		function(err, result){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(result));
+		}
+	});
+
+	//res.send(JSON.stringify({content_id:content_id}));
 	//res.send(JSON.stringify({}));
 });
 
+//사용자 작성글 리스트 조회
 router.get('/contentlist', function(req, res){
-	//사용자 작성글 리스트 조회
 	//nicname 
 	var nicname = req.query.nicname;
-	res.send(JSON.stringify([]));
+
+	connection.query('select * from contents where nicname = ? and delete_yn = 0',[nicname],
+		function(err, results, fields){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(results));
+		}
+	});
+
+	//res.send(JSON.stringify([]));
 });
 
 module.exports = router;

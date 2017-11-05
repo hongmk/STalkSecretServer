@@ -35,7 +35,7 @@ MongoClient.connect(url, function(err, db) {
 
 router.get('/list/:content_id', function(req, res){
 	var content_id = req.params.content_id;
-	console.log(req.query.sender_id);
+	//console.log(req.query.sender_id);
 	var comment = dbObj.collection('comments');
 	var condition = {};
 	if(req.query.content_id != undefined)
