@@ -28,61 +28,39 @@ router.post('/',function(req,res){
 	var password = req.body.password;
 	var officemail = req.body.officemail;
 	var phonenumber = req.body.phonenumber;
+	var user_dept = req.body.user_dept;
 	var hash = crypto.createHash('sha256').update(password).digest('base64');
 
+	connection.query('insert into users(user_id, nicname, password, user_dept) values(?, ?, ?, ?)',
+		[req.body.user_id, req.body.nicname, hash, user_dept],
+		function(insert_err, insert_result) {
+			if(insert_err){
+				res.send(JSON.stringify(insert_err));
+			} else {
 
-	//이미가입됐는지 검증
-	connection.query('select * from officemail where mail=? and phonenumber=? and  signup_yn = ?',[officemail, phonenumber, 1],
-	function(err, result, fields) {
-		if(err){
-			res.send(JSON.stringify({
-				result:"false",
-				db_result:result,
-				message:"메일가입정보확인중 시스템 오류발생. 다시시도해주세요."
-			}));
-		} else if(result.length !=0) {
-				res.send(JSON.stringify({
-					result:"false",
-					db_result:result,
-					message:"이미등록된 회원입니다."
-				}));
-			
-		} else {
-			//기존에 미가입 회원만 가입하도록 함
-
-			connection.query('insert into users(user_id, nicname, password) values(?, ?, ?)',
-				[req.body.user_id, req.body.nicname, hash],
-				function(err, result) {
-					if(err){
-						res.send(JSON.stringify(err));
+				connection.query('update officemail set signup_yn = ? where mail=? and phonenumber=?',[1, officemail, phonenumber],
+				function(update_err, update_result) {
+					if(update_err){
+						res.send(JSON.stringify({
+							result:"false",
+							insert_result:"true",
+							update_result:"false",
+							mail:officemail,
+							phone:phonenumber,
+							db_result:update_result,
+							message:"회원등록 성공 / 메일가입정보 등록 실패"
+						}));
 					} else {
-
-						connection.query('update officemail set signup_yn = ? where mail=? and phonenumber=?',[1, officemail, phonenumber],
-						function(err, result) {
-							if(err){
-								res.send(JSON.stringify({
-									insert_result:"true",
-									update_result:"false",
-									mail:officemail,
-									phone:phonenumber,
-									db_result:result,
-									message:"회원등록 성공 / 메일가입정보 등록 실패"
-								}));
-							} else {
-								res.send(JSON.stringify({
-									insert_result:"true",
-									update_result:"false",
-									message:"회원가입완료"
-								}));
-							}
-						});
+						res.send(JSON.stringify({
+							result:"true",
+							insert_result:"true",
+							update_result:"true",
+							message:"회원가입완료"
+						}));
 					}
 				});
-
-		}
-
-	});
-
+			}
+		});
 
 });
 
@@ -91,7 +69,10 @@ router.get('/auth/officemail', function(req, res) {
 	var officemail = req.query.officemail;
 	var phonenumber = req.query.phonenumber;
 
-	connection.query('select signup_yn from officemail where mail=? and phonenumber=?',[officemail, phonenumber],
+	
+	//기존에 미가입 회원만 가입하도록 함
+
+	connection.query('select signup_yn, dept from officemail where mail=? and phonenumber=?',[officemail, phonenumber],
 	function(err, result, fields) {
 		if(err){
 			res.send(JSON.stringify(err));
@@ -99,20 +80,24 @@ router.get('/auth/officemail', function(req, res) {
 			if(result.length == 0) {
 				res.send(JSON.stringify({
 					result:"false",
-					cnt:0,
+					result_code:-1,
+					dept:0,
 					message:"메일인증실패 메일 및 전화번호를 다시확인해주세요."
 				}));
 
 			} else if(result[0].signup_yn == 1) {
 				res.send(JSON.stringify({
 					result:"false",
-					signup_yn:result[0].signup_yn,
+					result_code:1,
+					dept:0,
 					message:"이미등록된 사용자입니다."
 				}));
 
 			} else {
 				res.send(JSON.stringify({
 					result:"true",
+					result_code:0,
+					dept:result[0].dept,
 					message:"메일인증성공"
 				}));
 			}
@@ -201,17 +186,20 @@ router.get('/auth/nicname', function(req, res) {
 		if(err){
 			res.send(JSON.stringify({
 				result:"false",
+				result_code:-1,
 				message:"닉네임 검증도중 시스템오류 발생. 다시시도하시기 바랍니다."
 			}));
 		} else {
 			if(result[0].cnt==0) {
 				res.send(JSON.stringify({
 					result:"true",
+					result_code:0,
 					message:"등록가능한 닉네임입니다."
 				}));
 			} else {
 				res.send(JSON.stringify({
 					result:"false",
+					result_code:1,
 					message:"이미등록된 닉네임입니다."
 				}));
 			}
@@ -219,6 +207,37 @@ router.get('/auth/nicname', function(req, res) {
 	});
 
 });
+
+//ID인증
+router.get('/auth/user_id', function(req, res) { 
+	var user_id = req.query.user_id;
+	connection.query('select count(1) AS cnt from users where user_id=?',[user_id],
+	function(err, result) {
+		if(err){
+			res.send(JSON.stringify({
+				result:"false",
+				result_code:-1,
+				message:"ID 검증도중 시스템오류 발생. 다시시도하시기 바랍니다."
+			}));
+		} else {
+			if(result[0].cnt==0) {
+				res.send(JSON.stringify({
+					result:"true",
+					result_code:1,
+					message:"등록가능한 ID입니다."
+				}));
+			} else {
+				res.send(JSON.stringify({
+					result:"false",
+					result_code:1,
+					message:"이미등록된 ID입니다."
+				}));
+			}
+		}
+	});
+
+});
+
 
 router.put('/nicname', function(req, res) {
 	//rowid, nicname

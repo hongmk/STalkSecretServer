@@ -12,13 +12,15 @@ CREATE TABLE officemail (
     PRIMARY KEY (row_id , mail)
 );
 
-insert into officemail(mail, phonenumber) values("testmail2@shinhan.com", "01011112222");
+insert into officemail(mail, phonenumber) values("testmail3@shinhan.com", "01094441993");
 
 select * from officemail;
  
 update officemail
-set signup_yn =0;
+set signup_yn = 0;
 
+update officemail
+set phonenumber = '01094441993';
 
-
+ 
 delete from officemail where row_id is null;

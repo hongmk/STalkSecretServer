@@ -26,7 +26,11 @@ CREATE TABLE users (
 select * from users;
 
 update users
-set user_dept = 1;
+set user_dept = 1, signup_yn = 0;
+
+delete from users;
+
+
 
 create table login_token(
 row_id integer primary key auto_increment,
