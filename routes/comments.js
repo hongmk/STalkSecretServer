@@ -67,14 +67,23 @@ router.post('/', function(req, res){
 						delete_date:delete_date};
 	var comment = dbObj.collection('comments');
 	comment.save(comment_obj, function(err, result){
+
 		if (err) {
 			res.send(JSON.stringify(err));
+
 		} else {
-			res.send(JSON.stringify(result));
+			//해당글 댓글 건수에 1추가
+			connection.query('update contents set comment_cnt=comment_cnt+1  where row_id = ?',[content_id],
+				function(err, result){
+				if(err){
+					res.send(JSON.stringify(err));
+				} else {
+					res.send(JSON.stringify(result));
+				}
+			});
 		}
 	});
-	//res.send(JSON.stringify({content_id:content_id, nicname:nicname, comment:comment}));
-	//res.send(JSON.stringify({}));
+
 });
 
 router.put('/comments', function(req, res){

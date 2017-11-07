@@ -133,16 +133,38 @@ router.get('/contentlist', function(req, res){
 	//nicname 
 	var nicname = req.query.nicname;
 
-	connection.query('select * from contents where nicname = ? and delete_yn = 0',[nicname],
+	connection.query('select row_id, title, content from contents where nicname = ? and delete_yn = 0',[nicname],
 		function(err, results, fields){
 		if(err){
-			res.send(JSON.stringify(err));
+			res.send(JSON.stringify({result:"false"}));
 		} else {
-			res.send(JSON.stringify(results));
+			res.send(JSON.stringify({ result:"true",
+										content_id:results[0].row_id,
+										title:results[0].title,
+										content:results[0].content
+									}));
 		}
 	});
 
 	//res.send(JSON.stringify([]));
 });
+
+//글 Like
+router.put('/content/like/:content_id', function(req, res) {
+	//contentid, content
+	var content_id = req.params.content_id;
+	connection.query('update contents set like_cnt=like_cnt+1  where row_id = ?',[content_id],
+		function(err, result){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(result));
+		}
+	});
+
+	//res.send(JSON.stringify({content_id:content_id, content:content}));
+	//res.send(JSON.stringify({}));
+});
+
 
 module.exports = router;
