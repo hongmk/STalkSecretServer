@@ -114,11 +114,27 @@ router.delete('/comments/list', function(req, res) {
 	//res.send(JSON.stringify({}));
 });
 
-router.get('/comments/commentlist', function(req, res){
+router.get('/commentlist', function(req, res){
 	//사용자 작성글 리스트 조회
 	//nicname 
 	var nicname = req.query.nicname;
-	res.send(JSON.stringify({nicname:nicname}) + JSON.stringify([]));
+	//console.log(req.query.sender_id);
+	var comment = dbObj.collection('comments');
+	var condition = {};
+	
+	condition = {nicname:nicname};
+	
+
+	comment.find(condition).toArray(function(err, results){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(results));
+		}
+	});
+
+
+	//res.send(JSON.stringify({nicname:nicname}) + JSON.stringify([]));
 });
 
 module.exports = router;

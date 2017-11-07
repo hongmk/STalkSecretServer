@@ -138,11 +138,7 @@ router.get('/contentlist', function(req, res){
 		if(err){
 			res.send(JSON.stringify({result:"false"}));
 		} else {
-			res.send(JSON.stringify({ result:"true",
-										content_id:results[0].row_id,
-										title:results[0].title,
-										content:results[0].content
-									}));
+			res.send(JSON.stringify(results));
 		}
 	});
 
