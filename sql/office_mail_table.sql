@@ -12,7 +12,7 @@ CREATE TABLE officemail (
     PRIMARY KEY (row_id , mail)
 );
 
-insert into officemail(mail, phonenumber) values("testmail3@shinhan.com", "01094441993");
+insert into officemail(mail, phonenumber) values("testmail5@shinhan.com", "01094441993");
 
 select * from officemail;
  

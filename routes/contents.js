@@ -36,15 +36,28 @@ router.get('/list/:board_id', function(req, res){
 });
 
 //글 1개 조회
-router.get('/content/:row_id', function(req, res){
-	var row_id = req.params.row_id;
+router.get('/content/:content_id', function(req, res){
 
-	connection.query('select * from contents where row_id = ? and delete_yn = 0',[row_id],
+	var content_id = req.params.content_id;
+
+	connection.query('select nicname, title, content, comment_cnt, last_modify_date from contents where row_id = ? and delete_yn = 0', [content_id],
 		function(err, results, fields){
 		if(err){
-			res.send(JSON.stringify(err));
+			res.send(JSON.stringify({result:"false", result_code:-1}));
+
 		} else {
-			res.send(JSON.stringify(results[0]));
+			if(results.length > 0 ) {
+
+				res.send(JSON.stringify({	result:"true", 
+											nicname:results[0].nicname, 
+											title:results[0].title, 
+											content:results[0].content, 
+											comment_cnt:results[0].comment_cnt,
+											last_modify_date:results[0].last_modify_date}));
+
+			} else {
+				res.send(JSON.stringify({result:"false", result_code:1}));
+			}
 		}
 	});
 
@@ -65,7 +78,7 @@ router.post('/', function(req, res) {
 						[user_id,nicname, board_id, title, content],
 	function(err, result) {
 		if(err){
-			res.send(JSON.stringify(err));
+			res.send(JSON.stringify({result:"false"}));
 		} else {
 			//res.send(JSON.stringify(result));
 			res.send(JSON.stringify({result:"true", user_id:user_id, nicname:nicname, board_id:board_id, title:title, content:content}));
@@ -76,13 +89,6 @@ router.post('/', function(req, res) {
 	//res.send(JSON.stringify({}));
 });
 
-router.get('/content/:content_id', function(req, res){
-	//contentid, nicname
-	var content_id = req.params.content_id;
-	var nicname = req.query.nicname;
-	res.send(JSON.stringify({content_id:content_id, nicname:nicname}));
-	//res.send(JSON.stringify({}));
-});
 
 //글수정
 router.put('/content', function(req, res) {
