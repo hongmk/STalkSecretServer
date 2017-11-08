@@ -115,7 +115,7 @@ router.delete('/comments/list', function(req, res) {
 });
 
 router.get('/commentlist', function(req, res){
-	//사용자 작성글 리스트 조회
+	//사용자 작성댓글 리스트 조회
 	//nicname 
 	var nicname = req.query.nicname;
 	//console.log(req.query.sender_id);

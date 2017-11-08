@@ -133,7 +133,7 @@ router.get('/contentlist', function(req, res){
 	//nicname 
 	var nicname = req.query.nicname;
 
-	connection.query('select row_id, title, content from contents where nicname = ? and delete_yn = 0',[nicname],
+	connection.query('select row_id, title, content, last_modify_date from contents where nicname = ? and delete_yn = 0',[nicname],
 		function(err, results, fields){
 		if(err){
 			res.send(JSON.stringify({result:"false"}));
