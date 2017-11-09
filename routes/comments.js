@@ -105,12 +105,25 @@ router.delete('/comments', function(req, res){
 	//res.send(JSON.stringify({}));
 });
 
-router.delete('/comments/list', function(req, res) {
+router.delete('/list', function(req, res) {
 	//해당 게시글의 모든 댓글삭제함
 	//contentid 
-	var contentid = req.body.contentid;
+	var content_id = req.body.content_id;
 
-	res.send(JSON.stringify({contentid:contentid}));
+	var comment = dbObj.collection('comments');
+	var condition = {};
+	
+	condition = {content_id:content_id};
+	
+	comment.find(condition).toArray(function(err, results){
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+			res.send(JSON.stringify(results));
+		}
+	});
+
+	//res.send(JSON.stringify({contentid:contentid}));
 	//res.send(JSON.stringify({}));
 });
 
