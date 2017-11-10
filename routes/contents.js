@@ -53,6 +53,7 @@ router.get('/content/:content_id', function(req, res){
 											title:results[0].title, 
 											content:results[0].content, 
 											comment_cnt:results[0].comment_cnt,
+											like_cnt:results[0].like_cnt,
 											last_modify_date:results[0].last_modify_date}));
 
 			} else {

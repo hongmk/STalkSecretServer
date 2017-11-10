@@ -38,8 +38,8 @@ router.get('/list/:content_id', function(req, res){
 	//console.log(req.query.sender_id);
 	var comment = dbObj.collection('comments');
 	var condition = {};
-	if(req.query.content_id != undefined)
-		condition = {content_id:req.query.content_id};
+	if(content_id != undefined)
+		condition = {content_id:content_id};
 
 	comment.find(condition).toArray(function(err, results){
 		if(err){
@@ -50,6 +50,31 @@ router.get('/list/:content_id', function(req, res){
 	});
 	//res.send(JSON.stringify({contentid:contentid}) + JSON.stringify([]));
 });
+
+router.get('/count/:content_id', function(req, res){
+	var content_id = req.params.content_id;
+	//console.log(req.query.sender_id);
+	var comment = dbObj.collection('comments');
+	var condition = {};
+	if(content_id != undefined)
+		condition = {content_id:content_id};
+
+	comment.count(condition, function(err, numOfDocs) {
+		if(err){
+			res.send(JSON.stringify(err));
+		} else {
+
+			res.send(JSON.stringify({
+				result:"true",
+				count:numOfDocs,
+				param:content_id
+			}));
+		}
+  
+	});
+
+});
+
 
 router.post('/', function(req, res){
 	//contentid, id, nicname, comment
