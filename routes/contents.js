@@ -95,14 +95,19 @@ router.post('/', function(req, res) {
 router.put('/content', function(req, res) {
 	//contentid, content
 	var content_id = req.body.content_id;
+	var title = req.body.title;
 	var content = req.body.content;
 	var last_modify_date = new Date();
-	connection.query('update contents set content = ? , last_modify_date = ? where row_id = ?',[content, last_modify_date, content_id],
+	connection.query('update contents set title = ? , content = ? , last_modify_date = ? where row_id = ?',[title, content, last_modify_date, content_id],
 		function(err, result){
 		if(err){
-			res.send(JSON.stringify(err));
+			res.send(JSON.stringify({
+				result:"flase"
+			}));
 		} else {
-			res.send(JSON.stringify(result));
+			res.send(JSON.stringify({
+				result:"true"
+			}));
 		}
 	});
 
@@ -119,9 +124,13 @@ router.delete('/content', function(req, res) {
 	connection.query('update contents set delete_yn = ? , last_modify_date = ? where row_id = ?',[1, last_modify_date, content_id],
 		function(err, result){
 		if(err){
-			res.send(JSON.stringify(err));
+			res.send(JSON.stringify({
+				result:"false"
+			}));
 		} else {
-			res.send(JSON.stringify(result));
+			res.send(JSON.stringify({
+					result:"true"
+			}));
 		}
 	});
 

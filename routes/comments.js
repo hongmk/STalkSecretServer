@@ -32,22 +32,24 @@ MongoClient.connect(url, function(err, db) {
   dbObj = db;
 });
 
+var ObjectID = require('mongodb').ObjectID;
 
 router.get('/list/:content_id', function(req, res){
 	var content_id = req.params.content_id;
 	//console.log(req.query.sender_id);
 	var comment = dbObj.collection('comments');
 	var condition = {};
-	if(content_id != undefined)
+	if(content_id != undefined) {
 		condition = {content_id:content_id};
-
-	comment.find(condition).toArray(function(err, results){
-		if(err){
-			res.send(JSON.stringify(err));
-		} else {
-			res.send(JSON.stringify(results));
-		}
-	});
+	
+		comment.find(condition).toArray(function(err, results){
+			if(err){
+				res.send(JSON.stringify(err));
+			} else {
+				res.send(JSON.stringify(results));
+			}
+		});
+	}
 	//res.send(JSON.stringify({contentid:contentid}) + JSON.stringify([]));
 });
 
@@ -103,7 +105,18 @@ router.post('/', function(req, res){
 				if(err){
 					res.send(JSON.stringify(err));
 				} else {
-					res.send(JSON.stringify(result));
+					connection.query('select comment_cnt from contents where row_id = ?',[content_id],
+						function(err, results, fields){
+						if(err){
+							res.send(JSON.stringify(err));
+						} else {
+							res.send(JSON.stringify({
+								result:"true",
+								comment_cnt:results[0].comment_cnt
+							}));
+						}
+					});
+					//res.send(JSON.stringify(result));
 				}
 			});
 		}
@@ -121,13 +134,44 @@ router.put('/comments', function(req, res){
 	//res.send(JSON.stringify({}));
 });
 
-router.delete('/comments', function(req, res){
-	//contentid, commentid
-	var contentid = req.body.contentid;
-	var commentid = req.body.commentid;
+router.delete('/', function(req, res){
+	//commentid
+	var content_id = req.body.content_id;
+	var comment_id = req.body.comment_id;
+	var comment = dbObj.collection('comments');
+	var condition = {};
+	
 
-	res.send(JSON.stringify({contentid:contentid, commentid:commentid}));
-	//res.send(JSON.stringify({}));
+	if(comment_id != undefined) {
+		condition = {_id:ObjectID.createFromHexString(comment_id)};
+	
+		comment.remove(condition, function(err, result){
+			if(err){
+				res.send(JSON.stringify({
+					result:"false"
+				}));
+			} else {
+				//해당글 댓글 건수에 1마이너스
+				connection.query('update contents set comment_cnt=comment_cnt-1  where row_id = ?',[content_id],
+					function(err2, result2){
+					if(err2){
+						res.send(JSON.stringify(err));
+					} else {
+						
+						res.send(JSON.stringify({
+							result:"true",
+							id:comment_id,
+							content_id:content_id
+						}));
+
+					}
+				});
+
+
+			}
+		});
+	}
+
 });
 
 router.delete('/list', function(req, res) {
