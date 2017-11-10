@@ -25,6 +25,11 @@ CREATE TABLE users (
 
 select * from users;
 
+update users
+set nicname="제작자"
+where nicname = "STalk제작자";
+
+
 
 
 

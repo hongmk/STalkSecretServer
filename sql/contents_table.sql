@@ -24,6 +24,10 @@ SELECT
     *
 FROM contents;
 
+update
+set
+where nicname = STalk제작자
+
 
 
 

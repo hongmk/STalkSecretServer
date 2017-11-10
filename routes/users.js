@@ -20,6 +20,17 @@ var connection = mysql.createConnection({
  
 connection.connect();
 
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost:27017/restful';
+var dbObj = null;
+MongoClient.connect(url, function(err, db) {
+  console.log("Connected correctly to mongodb server");
+  dbObj = db;
+});
+
+var ObjectID = require('mongodb').ObjectID;
+
+
 /* GET users listing. */
 /////////////////////회원가입 및 로그인 구현///////////////////////////
 var crypto  = require('crypto');
@@ -239,11 +250,113 @@ router.get('/auth/user_id', function(req, res) {
 });
 
 
+//기존암호 검증
+router.get('/auth/password', function(req, res) { 
+	var user_id = req.query.user_id;
+	var password = req.query.password;
+	var hash = crypto.createHash('sha256').update(password).digest('base64');
+
+	connection.query('select count(1) AS cnt from users where user_id=? and password = ?',[user_id, hash],
+	function(err, result) {
+		if(err){
+			res.send(JSON.stringify({
+				result:"false",
+				result_code:-1
+			}));
+		} else {
+			if(result[0].cnt==0) {
+				res.send(JSON.stringify({
+					result:"false",
+					result_code:-1
+				}));
+			} else {
+				res.send(JSON.stringify({
+					result:"true",
+					result_code:1
+				}));
+			}
+		}
+	});
+
+});
+
+router.put('/password', function(req, res) {
+	//rowid, nicname
+	var user_id  = req.body.user_id;
+	var password = req.body.password;
+	var new_password = req.body.new_password;
+	var hash = crypto.createHash('sha256').update(password).digest('base64');
+	var new_hash = crypto.createHash('sha256').update(new_password).digest('base64');
+
+	connection.query('update users set password = ? where user_id = ? and password = ?',[new_hash, user_id, hash],
+		function(err, result) {
+			if(err){
+				res.send(JSON.stringify({
+					result:"false",
+					dbresult:result
+				}));
+			} else {
+				
+				res.send(JSON.stringify({
+					result:"true",
+					pw:hash,
+					new_pw:new_hash,
+					dbresult:result
+				}));
+
+			}
+	});
+});
+
 router.put('/nicname', function(req, res) {
 	//rowid, nicname
-	var rowid = req.body.rowid;
+	var user_id = req.body.user_id;
 	var nicname = req.body.nicname;
-	res.send(JSON.stringify({rowid:rowid, nicname:nicname}));
+	var new_nicname = req.body.new_nicname;
+
+	connection.query('update users set nicname =? where user_id = ? and nicname = ?',[new_nicname, user_id, nicname],
+		function(users_update_err, users_update_result) {
+			if(users_update_err){
+				res.send(JSON.stringify({
+					result:"false"
+				}));
+			} else {
+				connection.query('update contents set nicname = ? where user_id = ? and nicname = ?',[new_nicname, user_id, nicname],
+					function(contents_update_err, contents_update_result) {
+						if(contents_update_err){
+							res.send(JSON.stringify({
+								result:"false"
+							}));
+						} else {
+							var comment = dbObj.collection('comments');
+							var condition = {};
+							var newvalue  = {};
+							if(nicname != undefined && new_nicname !=undefined) {
+								condition = {nicname:nicname};
+								newvalue  = {$set: {nicname:new_nicname}};
+								comment.updateMany(condition, newvalue, function(comments_update_err, comments_update_result){
+									if(comments_update_err){
+										res.send(JSON.stringify({
+											result:"false"
+										}));
+									} else {
+										res.send(JSON.stringify({
+											result:"true",
+											nicname:nicname,
+											newnicname:new_nicname,
+											dbresult:comments_update_result
+										}));
+									}
+								});
+							}
+
+						}
+				});
+
+			}
+	});
+
+	//res.send(JSON.stringify({rowid:rowid, nicname:nicname}));
 	//res.send(JSON.stringify({}));
 });
 
