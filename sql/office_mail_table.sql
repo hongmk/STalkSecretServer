@@ -22,5 +22,9 @@ set signup_yn = 0;
 update officemail
 set phonenumber = '01094441993';
 
+update officemail
+set phonenumber = '01094441993'
+where mail='testmail4@shinhan.com';
+
  
 delete from officemail where row_id is null;

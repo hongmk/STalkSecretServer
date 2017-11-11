@@ -26,10 +26,13 @@ CREATE TABLE users (
 select * from users;
 
 update users
+set user_dept = 3
+where row_Id = 10;
+
+
+update users
 set nicname="제작자"
 where nicname = "STalk제작자";
-
-
 
 
 

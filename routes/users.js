@@ -360,25 +360,6 @@ router.put('/nicname', function(req, res) {
 	//res.send(JSON.stringify({}));
 });
 
-//현재 비밀번호 확인
-router.get('/password', function(req, res) {
-	//nicname, password
-	var nicname = req.query.nicname;
-	var password	= req.query.password;
-
-	res.send(JSON.stringify({nicname:nicname, password: password}));
-	//res.send(JSON.stringify({}));
-});
-
-//비밀번호 변경
-router.put('/password', function(req, res) {
-	//rowid, id, password
-	var rowid = req.body.rowid;
-	var id = req.body.id;
-	var password = req.body.password;
-	res.send(JSON.stringify({rowid:rowid, id:id, nicname:nicname}));
-	//res.send(JSON.stringify({}));
-});
 
 //알림설정
 router.put('/setting', function(req, res) {
